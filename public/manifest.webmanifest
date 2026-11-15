@@ -1,0 +1,17 @@
+{
+  "name": "AstroDrishti — Kundli, Milan & Panchang",
+  "short_name": "AstroDrishti",
+  "description": "Vedic kundli generator, Ashtakoot milan, daily panchang, dosha reports, numerology and priced consultations.",
+  "start_url": "./#/",
+  "display": "standalone",
+  "background_color": "#070616",
+  "theme_color": "#070616",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23070616'/%3E%3Cpath d='M50 14l9.5 25.5L87 41l-20.5 17.5L72 85 50 70 28 85l5.5-26.5L13 41l27.5-1.5z' fill='%23e8b64c'/%3E%3C/svg%3E",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
