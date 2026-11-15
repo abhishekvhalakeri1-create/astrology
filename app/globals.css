@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Serif+Display&family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #1A0F0A;
+  --ivory: #FFFEFB;
+  --gold: #C9A86A;
+  --maroon: #7C2D2D;
+}
+
+html {
+  scroll-behavior: smooth;
+  touch-action: manipulation;
+}
+
+html, body {
+  background: #FFFEFB;
+  color: #1A0F0A;
+  font-family: "Source Sans 3", "Manrope", system-ui, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
+  overflow-x: hidden;
+  pointer-events: auto;
+}
+
+/* Editorial Typography - Magazine Quality */
+.font-serif {
+  font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.font-display {
+  font-family: "DM Serif Display", "Cormorant Garamond", serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* Paper texture - subtle, tactile, luxurious */
+.paper {
+  background-color: #FFFEFB;
+  background-image: 
+    radial-gradient(at 20% 30%, rgba(201,168,106,0.03) 0px, transparent 50%),
+    radial-gradient(at 80% 70%, rgba(124,45,45,0.02) 0px, transparent 50%);
+}
+
+.gold-separator {
+  height: 1px;
+  background: #C9A86A;
+  opacity: 0.2;
+}
+
+/* Editorial framing */
+.frame {
+  border: 1px solid #E8DDD0;
+  position: relative;
+}
+
+.frame::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(201,168,106,0.15);
+  pointer-events: none;
+}
+
+/* Bulletproof Click Handling - Fix for mobile */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+  touch-action: manipulation;
+  pointer-events: auto !important;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+button:active, a:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* Ensure all interactive elements are clickable */
+a[href^="tel:"], a[href^="https://wa.me"], button {
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  cursor: pointer !important;
+}
+
+/* Fix for iOS Safari click delay */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #C9A86A #FFFEFB;
+  -webkit-touch-callout: none;
+}
+
+a, button {
+  -webkit-touch-callout: default;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: #C9A86A; border-radius: 2px; }
+::-webkit-scrollbar-track { background: #FFFEFB; }
+
+/* Ensure no overlay blocks clicks */
+header, nav, main, footer {
+  pointer-events: auto;
+}
+
+/* Mobile bottom bar must be clickable */
+.fixed.bottom-0 {
+  pointer-events: auto !important;
+  z-index: 70 !important;
+}
+
+.fixed.bottom-6 {
+  pointer-events: auto !important;
+  z-index: 60 !important;
+}
+
+/* Prevent invisible overlays from blocking */
+.pointer-events-none {
+  pointer-events: none !important;
+}
+
+.pointer-events-auto {
+  pointer-events: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile specific fixes */
+@media (max-width: 1024px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Ensure bottom bar doesn't get covered */
+  body {
+    padding-bottom: 0;
+  }
+}
