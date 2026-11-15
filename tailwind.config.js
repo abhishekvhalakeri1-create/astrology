@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+const serif = ['"Cormorant Garamond Variable"', '"Noto Serif Devanagari Variable"', '"Noto Serif Kannada Variable"', 'Georgia', 'serif'];
+const sans = ['"Source Sans 3 Variable"', '"Noto Sans Devanagari Variable"', '"Noto Sans Kannada Variable"', 'system-ui', 'sans-serif'];
+
 module.exports = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -41,9 +44,9 @@ module.exports = {
         }
       },
       fontFamily: {
-        serif: ["Cormorant Garamond", "Playfair Display", "Libre Baskerville", "Georgia", "serif"],
-        sans: ["Source Sans 3", "Manrope", "Lato", "system-ui", "sans-serif"],
-        display: ["DM Serif Display", "Cormorant Garamond", "serif"]
+        serif,
+        sans,
+        display: serif,
       },
       letterSpacing: {
         editorial: "-0.025em",
@@ -53,7 +56,15 @@ module.exports = {
       lineHeight: {
         editorial: "1.1",
         relaxed: "1.7",
-      }
+      },
+      keyframes: {
+        "spin-slow": { to: { transform: "rotate(360deg)" } },
+        "rise": { from: { opacity: "0", transform: "translateY(10px)" }, to: { opacity: "1", transform: "translateY(0)" } },
+      },
+      animation: {
+        "spin-slow": "spin-slow 180s linear infinite",
+        "rise": "rise 0.5s ease-out both",
+      },
     }
   },
   plugins: []

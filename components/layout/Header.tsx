@@ -1,133 +1,153 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-import { useAppStore } from "@/lib/store";
-import { Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ChevronRight, Instagram, Menu, MessageCircle, Phone, X } from "lucide-react";
+import { setLang, useLang } from "@/lib/useLang";
+import type { Lang, Tri } from "@/lib/astro/names";
+import { ABOUT_LINK, JOURNAL_LINK, SERVICES_LINK, TOOLS } from "@/lib/nav";
+import { DEFAULT_WHATSAPP_MESSAGE, INSTAGRAM_HANDLE, INSTAGRAM_URL, PHONE, TEL_HREF, asset, whatsappHref } from "@/lib/site";
+
+const LANGUAGES: { code: Lang; label: string; name: string }[] = [
+  { code: "en", label: "EN", name: "English" },
+  { code: "hi", label: "हि", name: "हिन्दी" },
+  { code: "kn", label: "ಕ", name: "ಕನ್ನಡ" },
+];
+
+const T = {
+  since: { en: "Rajeshwari • Since 2009", hi: "राजेश्वरी • 2009 से", kn: "ರಾಜೇಶ್ವರಿ • 2009 ರಿಂದ" },
+  book: { en: "Book a Reading", hi: "परामर्श लें", kn: "ಸಮಾಲೋಚನೆ" },
+  call: { en: "Call", hi: "कॉल करें", kn: "ಕರೆ ಮಾಡಿ" },
+  menu: { en: "Menu", hi: "मेनू", kn: "ಮೆನು" },
+  close: { en: "Close menu", hi: "मेनू बंद करें", kn: "ಮೆನು ಮುಚ್ಚಿ" },
+  tools: { en: "Free tools", hi: "निःशुल्क साधन", kn: "ಉಚಿತ ಸಾಧನಗಳು" },
+  more: { en: "The practice", hi: "परामर्श", kn: "ಸಮಾಲೋಚನೆ" },
+  hours: {
+    en: "9 AM – 9 PM, all days • Pay after the consultation",
+    hi: "सुबह 9 – रात 9, सभी दिन • परामर्श के बाद भुगतान",
+    kn: "ಬೆಳಿಗ್ಗೆ 9 – ರಾತ್ರಿ 9, ಎಲ್ಲಾ ದಿನ • ಸಮಾಲೋಚನೆ ನಂತರ ಪಾವತಿ",
+  },
+} satisfies Record<string, Tri>;
 
 export function Header() {
-  const pathname = usePathname();
-  const store = useAppStore();
-  const language = store?.language || "en";
-  const setLanguage = store?.setLanguage;
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const phone = "7892758565";
-  const phoneWithCountry = `+91${phone}`;
-  const whatsappNumber = `91${phone}`;
-  const instagramUrl = "https://www.instagram.com/shivohamastro66";
+  // Pages are built as <name>/index.html, so the address ends in a slash that the menu entries do not carry.
+  const pathname = (usePathname() ?? "/").replace(/\/+$/, "") || "/";
+  const lang = useLang();
+  const [open, setOpen] = useState(false);
 
-  const navItems = [
-    { href: "/horoscope", label: language === "hi" ? "राशिफल" : language === "kn" ? "ಭವಿಷ್ಯ" : "Horoscope" },
-    { href: "/birth-chart", label: language === "hi" ? "कुंडली" : language === "kn" ? "ಕುಂಡಲಿ" : "Kundli" },
-    { href: "/#astrologer", label: language === "hi" ? "ज्योतिषी" : language === "kn" ? "ಜ್ಯೋತಿಷಿ" : "Astrologer" },
-    { href: "/#services", label: language === "hi" ? "सेवाएं" : language === "kn" ? "ಸೇವೆಗಳು" : "Services" },
-    { href: "/#reviews", label: language === "hi" ? "समीक्षा" : language === "kn" ? "ವಿಮರ್ಶೆ" : "Reviews" },
-    { href: "/articles", label: language === "hi" ? "लेख" : language === "kn" ? "ಲೇಖನ" : "Journal" },
-  ];
+  // Screen readers and the script-specific type rules in globals.css both follow <html lang>.
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
-  const handleLanguage = (lang: string) => {
-    try {
-      if (setLanguage) setLanguage(lang as any);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("astro-lang", lang);
-        localStorage.setItem("astroconnect-storage", JSON.stringify({ state: { language: lang } }));
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  const desktopLinks = [...TOOLS, SERVICES_LINK];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FFFEFB] border-b border-[#E8DDD0]">
-      <div className="max-w-[1280px] mx-auto px-4 lg:px-8 h-[64px] lg:h-[72px] flex items-center justify-between">
-        <div className="flex items-center gap-6 lg:gap-10">
-          <Link href="/" className="flex items-center gap-2.5 cursor-pointer">
-            <img src="/logo-icon-small.webp" alt="AstroConnect" width={36} height={36} className="w-9 h-9 lg:w-10 lg:h-10 rounded-full border border-[#E8DDD0] object-cover" />
-            <div>
-              <div className="font-serif text-[15px] lg:text-[17px] font-bold tracking-[-0.01em] leading-none">AstroConnect</div>
-              <div className="text-[9px] lg:text-[10px] tracking-[0.12em] uppercase text-[#8B7355] mt-0.5">Rajeshwari • Since 2009</div>
-            </div>
-          </Link>
+    <header className="sticky top-0 z-40 bg-[#FFFEFB]/95 backdrop-blur border-b border-[#E8DDD0] no-print">
+      <div className="max-w-[1280px] mx-auto px-4 lg:px-8 h-[64px] lg:h-[72px] flex items-center justify-between gap-4">
+        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <img src={asset("/logo-icon-small.webp")} alt="" width={40} height={40} className="w-9 h-9 lg:w-10 lg:h-10 rounded-full border border-[#E8DDD0] object-cover" />
+          <span className="block">
+            <span className="block font-serif text-[17px] lg:text-[19px] font-bold leading-none tracking-[-0.01em]">AstroConnect</span>
+            <span className="block text-[10px] tracking-[0.1em] uppercase text-[#7A6548] mt-1 leading-none">{T.since[lang]}</span>
+          </span>
+        </Link>
 
-          <nav className="hidden lg:flex items-center gap-7">
-            {navItems.map(item=>{
-              const active = pathname === item.href;
-              return (
-                <Link key={item.href} href={item.href} className={`text-[13px] tracking-wide cursor-pointer ${active ? "text-[#1A0F0A] font-medium border-b border-[#1A0F0A] pb-1" : "text-[#6B5D52] hover:text-[#1A0F0A]"}`}>
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
+        <nav aria-label="Main" className="hidden xl:flex items-center gap-x-6 min-w-0">
+          {desktopLinks.map((item) => {
+            const active = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={`whitespace-nowrap text-[14px] py-2 border-b-2 transition-colors ${active ? "text-[#1A0F0A] font-semibold border-[#7C2D2D]" : "text-[#5A4A3D] border-transparent hover:text-[#1A0F0A] hover:border-[#C9A86A]"}`}
+              >
+                {item.label[lang]}
+              </Link>
+            );
+          })}
+        </nav>
 
-        <div className="flex items-center gap-2 lg:gap-3">
-          {/* Language - Working */}
-          <div className="flex items-center rounded-full border border-[#E8DDD0] bg-white p-0.5">
-            {[
-              { code: "en", label: "EN" },
-              { code: "hi", label: "हि" },
-              { code: "kn", label: "ಕ" },
-            ].map(l=>(
+        <div className="flex items-center gap-2 lg:gap-3 shrink-0">
+          <div role="group" aria-label="Language" className="flex items-center rounded-full border border-[#E8DDD0] bg-white p-0.5">
+            {LANGUAGES.map((l) => (
               <button
                 key={l.code}
                 type="button"
-                onClick={()=>handleLanguage(l.code)}
-                className={`px-3 py-1.5 rounded-full text-[11px] font-medium cursor-pointer min-w-[36px] min-h-[28px] transition-colors ${language===l.code ? "bg-[#1A0F0A] text-white" : "text-[#8B7355] hover:text-[#1A0F0A] hover:bg-[#F5F1EB]"}`}
+                onClick={() => setLang(l.code)}
+                aria-pressed={lang === l.code}
+                aria-label={l.name}
+                title={l.name}
+                className={`min-w-[38px] h-9 px-2.5 rounded-full text-[13px] font-semibold transition-colors ${lang === l.code ? "bg-[#1A0F0A] text-white" : "text-[#6B5D52] hover:text-[#1A0F0A] hover:bg-[#F5F1EB]"}`}
               >
                 {l.label}
               </button>
             ))}
           </div>
 
-          {/* WhatsApp - Direct Link to 7892758565 */}
-          <a 
-            href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Namaste Rajeshwari madam")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:inline-flex h-9 px-4 items-center justify-center rounded-full border border-[#E8DDD0] bg-white text-[12px] font-medium text-[#1A0F0A] hover:border-[#1A0F0A] hover:bg-[#F5F1EB] cursor-pointer"
-          >
-            WhatsApp
+          <a href={TEL_HREF} className="hidden md:inline-flex h-10 px-5 items-center justify-center gap-2 rounded-full bg-[#1A0F0A] text-white text-[13px] font-semibold hover:bg-[#3D2F26] whitespace-nowrap">
+            <Phone className="w-3.5 h-3.5" aria-hidden />
+            {T.book[lang]}
           </a>
 
-          {/* Book Consultation - Direct Call to 7892758565 */}
-          <a 
-            href={`tel:${phoneWithCountry}`}
-            className="hidden md:inline-flex h-9 px-5 items-center justify-center rounded-full bg-[#1A0F0A] text-white text-[12px] font-medium hover:bg-black cursor-pointer"
+          <button
+            type="button"
+            onClick={() => setOpen(!open)}
+            aria-expanded={open}
+            aria-controls="site-menu"
+            aria-label={open ? T.close[lang] : T.menu[lang]}
+            className="xl:hidden w-11 h-11 rounded-full border border-[#E8DDD0] bg-white flex items-center justify-center hover:bg-[#F5F1EB]"
           >
-            Book Consultation
-          </a>
-
-          <button type="button" onClick={()=>setMobileOpen(!mobileOpen)} className="lg:hidden w-10 h-10 rounded-full border border-[#E8DDD0] bg-white flex items-center justify-center cursor-pointer hover:bg-[#F5F1EB]">
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {open ? <X className="w-5 h-5" aria-hidden /> : <Menu className="w-5 h-5" aria-hidden />}
           </button>
         </div>
       </div>
 
-      {mobileOpen && (
-        <div className="lg:hidden border-t border-[#E8DDD0] bg-[#FFFEFB] px-4 py-6">
-          <nav className="flex flex-col gap-1">
-            {navItems.map(item=>(
-              <Link key={item.href} href={item.href} onClick={()=>setMobileOpen(false)} className="py-4 px-4 rounded-[8px] text-[16px] font-medium text-[#1A0F0A] hover:bg-[#F5F1EB] active:bg-[#E8DDD0] flex justify-between items-center cursor-pointer min-h-[48px]">
-                {item.label}
-                <span className="text-[#C9A86A]">→</span>
-              </Link>
-            ))}
-          </nav>
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <a href={`tel:${phoneWithCountry}`} onClick={()=>setMobileOpen(false)} className="h-14 rounded-full bg-[#1A0F0A] text-white flex items-center justify-center gap-2 text-[14px] font-medium cursor-pointer">
-              Call {phone}
+      {open && (
+        <div id="site-menu" className="xl:hidden border-t border-[#E8DDD0] bg-[#FFFEFB] max-h-[calc(100dvh-64px)] overflow-y-auto overscroll-contain">
+          <div className="max-w-[720px] mx-auto px-4 pt-5 pb-28">
+            <div className="eyebrow">{T.tools[lang]}</div>
+            <nav aria-label="Free tools" className="mt-2 border-t border-[#E8DDD0]">
+              {TOOLS.map((item) => (
+                <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="flex items-center gap-3 py-3.5 border-b border-[#E8DDD0] active:bg-[#F5F1EB]">
+                  <span className="flex-1 min-w-0">
+                    <span className="block text-[16px] font-semibold text-[#1A0F0A]">{item.label[lang]}</span>
+                    <span className="block text-[13px] leading-snug text-[#6B5D52] mt-0.5">{item.blurb[lang]}</span>
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-[#A68B5B] shrink-0" aria-hidden />
+                </Link>
+              ))}
+            </nav>
+
+            <div className="eyebrow mt-7">{T.more[lang]}</div>
+            <nav aria-label="The practice" className="mt-2 grid grid-cols-3 gap-2">
+              {[SERVICES_LINK, ABOUT_LINK, JOURNAL_LINK].map((item) => (
+                <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="h-12 flex items-center justify-center border border-[#E8DDD0] bg-white text-[14px] font-semibold text-[#1A0F0A] active:bg-[#F5F1EB]">
+                  {item.label[lang]}
+                </Link>
+              ))}
+            </nav>
+
+            <div className="mt-6 grid grid-cols-2 gap-2">
+              <a href={TEL_HREF} className="btn btn-ink">
+                <Phone className="w-4 h-4" aria-hidden /> {T.call[lang]}
+              </a>
+              <a href={whatsappHref(DEFAULT_WHATSAPP_MESSAGE)} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
+                <MessageCircle className="w-4 h-4" aria-hidden /> WhatsApp
+              </a>
+            </div>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-outline w-full mt-2">
+              <Instagram className="w-4 h-4" aria-hidden /> @{INSTAGRAM_HANDLE}
             </a>
-            <a href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Namaste Rajeshwari madam")}`} target="_blank" rel="noopener noreferrer" onClick={()=>setMobileOpen(false)} className="h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center gap-2 text-[14px] font-medium cursor-pointer">
-              WhatsApp
-            </a>
+            <p className="mt-4 text-center text-[13px] text-[#6B5D52]">
+              {PHONE} • {T.hours[lang]}
+            </p>
           </div>
-          <div className="mt-3 grid grid-cols-1 gap-2">
-            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="h-11 rounded-full border border-[#E8DDD0] bg-white flex items-center justify-center gap-2 text-[13px] font-medium cursor-pointer hover:border-[#1A0F0A]">
-              Instagram • shivohamastro66
-            </a>
-          </div>
-          <div className="mt-4 text-center text-[11px] text-[#8B7355]">Direct: {phone} • 9AM-9PM • Pay after • No middleman</div>
         </div>
       )}
     </header>

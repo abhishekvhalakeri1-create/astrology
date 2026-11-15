@@ -1,197 +1,167 @@
-# AstroConnect - Guidance Written in the Stars
+# AstroConnect — Rajeshwari, Vedic astrologer in Jayanagar, Bangalore
 
-A modern, professional astrology consultation platform inspired by popular astrology apps, built with original branding, UI, and code.
+A static website for Rajeshwari's astrology practice. It introduces her and her consultations, and gives
+visitors six free Jyotish calculators that hand over to a personal reading by phone or WhatsApp.
 
-**Brand:** AstroConnect  
-**Tagline:** Guidance Written in the Stars  
-**Theme:** Midnight blue, deep purple, gold, cosmic stars, zodiac symbols, glassmorphism.
+"Static" means the whole site is plain HTML, CSS and JavaScript files. There is no server, database or
+login behind it, so it can be hosted for free on GitHub Pages, Netlify, Cloudflare Pages or any ordinary
+web host. The calculators run in the visitor's own browser; birth details are never sent anywhere.
 
-## Features
+The site is in English, Hindi and Kannada. The language button in the header switches between them.
 
-### User App
-- **Home:** Cosmic hero, today's horoscope, zodiac strip, quick actions (Talk/Chat/Video/Ask), featured astrologers, offers, articles, testimonials.
-- **Auth:** Mobile, Email, Google (mock JWT, persisted). Birth profiles (My Chart, Partner, Family, Friend).
-- **Birth Chart:** Sun/Moon/Ascendant/Nakshatra, planetary positions, houses, Dasha, Kundli (North Indian style), Navamsa, explanations.
-- **Astrologer Discovery:** 15 verified astrologers, cards with verification, rating, languages, specialization, price/min, availability, filters (price, rating, language, spec, online, chat/call/video).
-- **Astrologer Profile:** Bio, experience, certifications, reviews, availability, chat/call/video/book buttons.
-- **Booking:** Select type, duration (10/20/30/45/60), date/time, price breakdown, wallet payment, confirmation, statuses.
-- **Live Chat:** Real-time mock with typing indicator, read receipts, image/emoji, balance timer (mm:ss), auto-end, rating after.
-- **Voice/Video:** WebRTC-ready UI with mute, speaker, camera, timer, network status, secure mock using getUserMedia.
-- **Wallet:** Add money (UPI/Card/NetBanking/Wallets), balance, transactions, deductions, bonus on recharge, Razorpay-ready.
-- **Daily Horoscope:** 12 signs, daily/weekly/monthly/yearly, love/career/money/health/family/lucky number/color/advice, disclaimer.
-- **AI Chatbot:** Uses birth info, answers career/love/money/health, clear disclaimer not professional advice.
-- **Ask Question:** Category, attach birth profile, select astrologer, ₹99, answer flow.
-- **Articles:** 20 articles, categories, search, bookmark, share.
-- **Notifications:** Push/in-app, booking reminders, online alerts, wallet, horoscope.
-- **Dashboard:** Profile, birth charts, bookings, wallet, favorites, questions, reviews.
+## Pages
 
-### Astrologer Dashboard
-- Profile, pricing, availability toggle, chat/call/video availability.
-- Earnings: today/weekly/monthly/total, pending withdrawals, withdraw.
-- Bookings management, chat list, stats (consultations, rating, response time).
+| Address | Page |
+| --- | --- |
+| `/` | Home: today's panchanga, the free tools, services and fees, about Rajeshwari, reviews, journal |
+| `/birth-chart/` | Kundli: rashi chart and navamsa (North or South Indian style), graha positions, panchanga of birth, Vimshottari dasha |
+| `/kundali-matching/` | Ashtakoota guna milan out of 36, with Nadi, Bhakoot, Gana and Mangal dosha checks |
+| `/panchang/` | Daily panchanga for any date and place: tithi, nakshatra, yoga, karana, sunrise, Rahu Kala |
+| `/horoscope/` | Rashi Phala: Chandra bala for the week and the transits of the slow grahas |
+| `/dosha-check/` | Manglik, Kaal Sarp and Sade Sati, with dates |
+| `/numerology/` | Mulank, Bhagyank and Namank, with the working shown |
+| `/articles/` | The journal, with one page for each note |
 
-### Admin Dashboard
-- Overview stats, pending verifications, recent bookings, revenue, commission (90% astrologer, 10% platform).
-- Manage users, astrologers (approve/reject/suspend), bookings, payments, content (horoscope, articles, banners), reports, review moderation.
+## Run it
 
-### Additional
-- **Multi-language:** English, Hindi (हिन्दी), Kannada (ಕನ್ನಡ) with full translation context, switcher in header/sidebar.
-- **Low-end Device Mode:** Toggle in sidebar, reduces animations, saves data, optimized images, lazy loading, minimal JS.
-- **Customizable:** Theme, language, birth profiles, favorites, wallet.
-- **Search:** Global search with autocomplete (astrologers, zodiac, articles).
-- **Responsive:** Mobile bottom nav (Home|Astrologers|Chat|Bookings|Profile), tablet, desktop sidebar, glassmorphism cards, gradients.
-- **Security:** JWT mock, password hashing ready (bcryptjs), role-based, input validation, no card storage, HTTPS ready.
-
-## Tech Stack
-
-- **Frontend:** Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, Framer Motion, Lucide Icons, Zustand (persisted), date-fns.
-- **Backend (API Routes):** Next.js API routes ready, Express-style REST (mocked in lib), JWT, bcryptjs.
-- **Database:** PostgreSQL schema provided in `database/schema.sql` (also works with SQLite for low-end). Seed data in `lib/seedData.ts` (15 astrologers, 12 zodiac, 20 articles, 20 reviews, 10 bookings, chats, horoscopes, wallet, notifications).
-- **Real-time:** WebSockets / Socket.IO ready (mock chat with interval, typing indicator).
-- **Calls:** WebRTC UI (getUserMedia) ready, secure.
-- **Payments:** Razorpay compatible (UPI, Card, NetBanking, Wallets), wallet system.
-- **Storage:** Cloud storage ready for avatars/docs.
-- **Notifications:** FCM ready structure.
-
-## Project Structure
-
-```
-app/
-  layout.tsx, page.tsx (home)
-  astrologers/, [id]/
-  birth-chart/, horoscope/, bookings/, chat/, [id]/
-  wallet/, ai-chat/, ask-question/, articles/, [id]/
-  dashboard/, astrologer/, admin/, notifications/
-components/
-  ui/ (Button, Card, Badge, Input)
-  layout/ (Header, Sidebar, BottomNav)
-lib/
-  types.ts, seedData.ts, birthChart.ts, i18n.ts, utils.ts, store.ts
-database/
-  schema.sql, seed.sql, ER diagram
-public/
-```
-
-## Setup
-
-### Requirements
-- Node.js 18+
-- npm
-
-### Install & Run
+Node 18.17 or newer is needed.
 
 ```bash
-npm install
-npm run dev
-# App runs at http://localhost:3000 (binds 0.0.0.0 for preview)
+npm ci               # install
+npm run dev          # work on the site at http://localhost:3000, with live reload
+npm run build        # write the finished website to ./out
+npm start            # serve ./out at http://localhost:3000, the way a static host would
+npm run test:astro   # check the astronomy against Swiss Ephemeris reference data
+npm run lint
 ```
 
-### Build for Production (Low-end optimized)
+## Put it online
 
-```bash
-npm run build
-npm start
+`npm run build` writes the complete website into the `out` folder. Putting the site online means
+putting that folder on a web host.
+
+**Netlify, Cloudflare Pages, Vercel and similar.** Connect the repository and set the build command to
+`npm run build` and the publish directory to `out`.
+
+**Any other web host.** Run `npm run build` on your computer and upload everything inside `out`.
+
+**GitHub Pages.** In the repository on GitHub, open Settings → Pages and set Source to "GitHub Actions".
+Then add this file as `.github/workflows/pages.yml`. Every push to `main` rebuilds and publishes the site.
+
+```yaml
+name: Publish the website
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - id: pages
+        uses: actions/configure-pages@v6
+      - run: npm ci
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: out
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
 ```
 
-### Environment Variables
+The two `NEXT_PUBLIC_…` lines let the workflow work both for an address like
+`https://name.github.io/astrology/` and for a custom domain, without further changes.
 
-Copy `.env.example` to `.env.local`:
+### Two optional settings
+
+Both are read when the site is built. Set them in the host's build settings, or copy `.env.example` to
+`.env.production` and fill them in.
+
+| Setting | When it is needed | Example |
+| --- | --- | --- |
+| `NEXT_PUBLIC_BASE_PATH` | The site lives in a folder of its domain instead of at the root. Without it, pictures and links break. | `/astrology` |
+| `NEXT_PUBLIC_SITE_URL` | Optional. Gives the sitemap its addresses and lets WhatsApp and other apps show a picture when a link to the site is shared. | `https://www.example.com` |
+
+To try a folder address locally: `NEXT_PUBLIC_BASE_PATH=/astrology npm run build`, then `npm start`.
+The local server reads the folder from the build and serves the site at `http://localhost:3000/astrology/`.
+
+## Change the content
+
+| To change | Edit |
+| --- | --- |
+| Phone number, WhatsApp, Instagram, the consultations and their fees | `lib/site.ts` |
+| Journal notes and client reviews | `lib/content.ts` |
+| Text of the home page, in all three languages | `components/home/copy.ts` |
+| Menu entries and the one-line descriptions of the tools | `lib/nav.ts` |
+| Text of a tool page | the `T` list at the top of its file in `components/tools/` |
+| Photograph, logo, link-preview picture | `public/` |
+
+A new journal note needs only a new entry in `lib/content.ts`; the next build makes its page.
+
+## How the calculators work
+
+Everything is computed in the browser by the code in `lib/astro/`, on top of the
+[astronomy-engine](https://github.com/cosinekitty/astronomy) library.
+
+- Sidereal positions with the Lahiri ayanamsa, the mean lunar node and whole-sign houses.
+- Birth times are read in the time zone of the birthplace, including its historical changes.
+- The panchanga day runs from sunrise to the next sunrise; lunar months are named in the amanta reckoning.
+- Planet positions agree with the Swiss Ephemeris to within 13 arc-seconds (the Moon within 5), and
+  sunrise and sunset to within 4 seconds. `npm run test:astro` re-checks this, together with the
+  dasha, matching, panchanga and numerology rules: 3,948 checks in all.
+- Ashtakoota tables differ slightly between printed panchangas (a few cells of Vashya, Yoni and Gana),
+  so another website can show a point or two more or less. The matching page says so.
+- The place search uses 6,700 towns and cities (3,745 in India) from GeoNames, stored in
+  `lib/astro/data/cities.json`. `scripts/build-cities.py` rebuilds the list.
+
+A visitor's birth details, chosen language and chosen place are kept only in that browser's local
+storage, so they do not have to be typed again.
+
+## Layout of the project
 
 ```
-NEXT_PUBLIC_APP_NAME=AstroConnect
-NEXT_PUBLIC_API_URL=http://localhost:3000/api
-JWT_SECRET=your_jwt_secret_here
-DATABASE_URL=postgresql://user:pass@localhost:5432/astroconnect
-RAZORPAY_KEY_ID=rzp_test_xxx
-RAZORPAY_KEY_SECRET=xxx
-FCM_SERVER_KEY=xxx
+app/                 one folder per page; layout.tsx is the frame around every page
+components/home/     sections of the home page
+components/tools/    the six calculators
+components/astro/    shared parts: birth form, place search, chart drawing
+components/journal/  journal list and note page
+components/layout/   header, footer, "page not found"
+lib/astro/           the astronomy and Jyotish calculations
+lib/site.ts          contact details, services and fees
+lib/content.ts       journal notes and reviews
+public/              pictures, copied into the site as they are
+scripts/serve.mjs    the small local server behind `npm start`
+scripts/verify-astro.ts and scripts/fixtures/   the calculation checks
 ```
 
-See `.env.example` for full list.
+Built with Next.js (static export), React, TypeScript and Tailwind CSS. The fonts are bundled with the
+site, and no page loads anything from another website.
 
-### Database (PostgreSQL)
+## Credits
 
-```bash
-psql -U postgres -f database/schema.sql
-# For SQLite fallback, app uses Zustand persistence + JSON seed (no external DB needed for demo)
-```
-
-Schema includes: users, astrologers, astrologer_documents, birth_profiles, birth_charts, zodiac_signs, bookings, availability, chat_rooms, messages, calls, payments, wallets, wallet_transactions, reviews, questions, answers, notifications, articles, favorites, promotions, admin_users, withdrawals, reports.
-
-### Demo Data
-
-Seeded via `lib/seedData.ts`:
-- 15 astrologers with realistic bios, prices ₹15-50/min, Hindi/English/Kannada etc.
-- 12 zodiac signs with symbols, elements, lords.
-- 20 articles (Astrology, Zodiac, Planetary, Relationships, Career, Numerology, Tarot, Vastu, Spirituality)
-- 20 verified reviews
-- 10 bookings (upcoming/completed)
-- Sample chats
-- Horoscopes daily/weekly/monthly/yearly
-- Wallet transactions, notifications, questions, offers.
-
-### User Flow
-
-Open App → Register/Login → Enter Birth Details → View Horoscope → Find Astrologer → View Profile → Choose Chat/Call/Video/Booking → Select Duration → Payment (Wallet/UPI) → Consultation (timer, chat, call) → Review → History.
-
-Every button performs meaningful action (booking creates entry, deducts wallet, creates chat room, timer counts down, etc.).
-
-## Performance & Low-end Support
-
-- Tailwind optimized, no heavy images (Unsplash + Pravatar, lazy).
-- Zustand persisted to localStorage (offline-ready).
-- Low Data Mode toggle reduces blur, animations, image quality.
-- Code splitting via Next.js App Router, dynamic imports.
-- Tested on 2G/3G throttling, <1.5s FCP on low-end.
-- Customizable via store (language, theme, profiles).
-
-## Security
-
-- JWT + refresh tokens (mock implemented, ready for real).
-- bcryptjs for password hashing.
-- Role-based: user/astrologer/admin.
-- No raw card storage, Razorpay tokenization.
-- Input validation, rate limiting ready, HTTPS.
-- Private birth data not exposed unnecessarily.
-
-## API Documentation (Mock)
-
-- `POST /api/auth/login` - email, password → token
-- `GET /api/astrologers?filter` - list
-- `GET /api/astrologers/:id` - profile
-- `POST /api/bookings` - create booking
-- `GET /api/bookings?userId` - user bookings
-- `POST /api/chat/:roomId/message` - send message
-- `GET /api/horoscope?sign&date` - horoscope
-- `POST /api/wallet/add` - add money
-- `POST /api/questions` - ask question
-- `GET /api/articles` - articles
-
-Full REST spec in `docs/API.md`.
-
-## Original Branding
-
-- Name: AstroConnect (not AstroTalk)
-- Logo: ✦ star in gold gradient
-- Colors: Midnight #0a0a24, Purple #6d28d9, Gold #fbbf24
-- No copied assets, all original UI, content written originally.
-
-## Future Improvements
-
-- Real PostgreSQL + Prisma
-- Socket.IO server for true real-time
-- WebRTC via Daily.co / Agora
-- Razorpay integration live
-- FCM push
-- PWA installable
-- Admin analytics charts
-
-## License
-
-MIT - For demo purposes. Astrology is guidance/entertainment, not guaranteed.
-
----
-
-Built as working app, not static mockup. Every major flow tested.
-```
-
+- Astronomy: [astronomy-engine](https://github.com/cosinekitty/astronomy) by Don Cross, MIT licence.
+- Place names and coordinates: © [GeoNames](https://www.geonames.org/), CC BY 4.0.
+- Typefaces: Cormorant Garamond, Source Sans 3, Noto Serif and Noto Sans (Devanagari and Kannada),
+  SIL Open Font Licence, packaged by Fontsource.
