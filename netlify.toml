@@ -1,0 +1,30 @@
+# Netlify reads this file when it builds the site, so nothing has to be typed into Netlify's
+# build settings: import the repository and press Deploy.
+
+[build]
+  # `npm run build` writes the finished website into ./out.
+  #
+  # $URL is the site's main address (its netlify.app name, or your own domain once you add one);
+  # Netlify hands it to every build. The site uses it for the sitemap and for the picture that
+  # WhatsApp shows when a link is shared. A NEXT_PUBLIC_SITE_URL set in Netlify's own
+  # environment variables takes precedence.
+  command = "NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-$URL} npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # The site is plain files with no server side, so Netlify's Next.js runtime is not needed.
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+# Files under /_next/static have a fingerprint in their name and never change,
+# so browsers may keep them for a year. Pages keep Netlify's default: always checked for a newer copy.
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

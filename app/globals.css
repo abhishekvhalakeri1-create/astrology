@@ -1,0 +1,219 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #1A0F0A;
+  --ivory: #FFFEFB;
+  --gold: #C9A86A;
+  --maroon: #7C2D2D;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    background: #FFFEFB;
+    color: #1A0F0A;
+    font-family: theme('fontFamily.sans');
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  button, a, [role="button"], select, input, label {
+    -webkit-tap-highlight-color: rgba(26, 15, 10, 0.08);
+    touch-action: manipulation;
+  }
+
+  button, a, [role="button"] {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  :focus-visible {
+    outline: 2px solid #A68B5B;
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: #F5E6C8;
+    color: #1A0F0A;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #C9A86A #FFFEFB;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #C9A86A; border-radius: 3px; }
+  ::-webkit-scrollbar-track { background: #FFFEFB; }
+}
+
+@layer components {
+  /* Headings. The family comes from tailwind.config.js; these are the editorial defaults, which utilities can override. */
+  .font-serif,
+  .font-display {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    /* The serif's default figures are old-style, and its 1 reads as a capital I: "the 11th" needs full-height figures. */
+    font-variant-numeric: lining-nums;
+  }
+
+  /* Small tracked label that sits above a heading. */
+  .eyebrow {
+    font-size: 11px;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8A6A2F;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 min-h-[48px] px-6 text-[14px] font-semibold leading-tight text-center transition-colors duration-150 select-none;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-ink {
+    @apply bg-[#1A0F0A] text-[#FFFEFB] hover:bg-[#3D2F26];
+  }
+  .btn-maroon {
+    @apply bg-[#7C2D2D] text-[#FFFEFB] hover:bg-[#5C1F1F];
+  }
+  .btn-gold {
+    @apply bg-[#C9A86A] text-[#1A0F0A] hover:bg-[#D9BC84];
+  }
+  .btn-outline {
+    @apply border border-[#D4C4B0] bg-white text-[#1A0F0A] hover:border-[#1A0F0A];
+  }
+  .btn-whatsapp {
+    @apply bg-[#0F7F43] text-white hover:bg-[#0B6635];
+  }
+  .btn:disabled {
+    @apply opacity-50;
+  }
+
+  .card {
+    @apply bg-white border border-[#E8DDD0];
+  }
+
+  /* Double-ruled frame, as on a printed panchanga. */
+  .frame {
+    border: 1px solid #E8DDD0;
+    position: relative;
+  }
+  .frame::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(201, 168, 106, 0.35);
+    pointer-events: none;
+  }
+
+  .field-label {
+    @apply block text-[12px] font-semibold text-[#3D2F26] mb-1.5;
+  }
+  .field {
+    @apply block w-full h-12 px-3 bg-white border border-[#D4C4B0] text-[16px] text-[#1A0F0A] placeholder:text-[#A39685] transition-colors;
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field:hover {
+    border-color: #A68B5B;
+  }
+  .field:focus {
+    outline: none;
+    border-color: #7C2D2D;
+    box-shadow: 0 0 0 3px rgba(124, 45, 45, 0.12);
+  }
+  select.field {
+    padding-right: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%237A6548' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+
+  /* Paper grain and warm washes used behind sections. */
+  .paper {
+    background-color: #FFFEFB;
+    background-image:
+      radial-gradient(at 12% 8%, rgba(201, 168, 106, 0.10) 0px, transparent 45%),
+      radial-gradient(at 88% 92%, rgba(124, 45, 45, 0.05) 0px, transparent 45%);
+  }
+  .wash-warm {
+    background-color: #FBF5EA;
+    background-image: radial-gradient(at 85% 0%, rgba(201, 168, 106, 0.18) 0px, transparent 55%);
+  }
+  .night {
+    background-color: #1A0F0A;
+    background-image:
+      radial-gradient(at 15% 0%, rgba(124, 45, 45, 0.45) 0px, transparent 50%),
+      radial-gradient(at 90% 100%, rgba(201, 168, 106, 0.16) 0px, transparent 50%);
+  }
+
+  .gold-separator {
+    height: 1px;
+    background: #C9A86A;
+    opacity: 0.3;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+}
+
+/*
+ * Devanagari and Kannada carry marks above and below the line and do not take letter-spacing well.
+ * These rules need to beat the size utilities on individual elements, so they sit outside the layers.
+ */
+html:lang(hi) .font-serif,
+html:lang(kn) .font-serif,
+html:lang(hi) .font-display,
+html:lang(kn) .font-display {
+  letter-spacing: 0;
+  line-height: 1.4;
+  font-weight: 600;
+}
+html:lang(hi) [class*="tracking-"],
+html:lang(kn) [class*="tracking-"],
+html:lang(hi) .eyebrow,
+html:lang(kn) .eyebrow {
+  letter-spacing: 0.02em;
+}
+html:lang(hi) .eyebrow,
+html:lang(kn) .eyebrow {
+  font-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
