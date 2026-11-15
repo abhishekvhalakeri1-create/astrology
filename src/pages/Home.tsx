@@ -153,7 +153,7 @@ export function ToolsGrid() {
       <Container>
         <SectionHead
           eyebrow="everything you came here for"
-          title="Eight tools, free and unlimited"
+          title={`${FREE_TOOLS.length} tools, free and unlimited`}
           sanskrit="निःशुल्क साधन"
           sub="No email wall, no “3 charts per day”, no fake countdown. If a tool needs a human, we say so and show the price next to it."
         />
@@ -183,6 +183,7 @@ function ToolIcon({ name }: { name: string }) {
   const map: Record<string, React.ReactNode> = {
     compass: <Compass size={18} />, heart: <Heart size={18} />, sun: <Sun size={18} />, moon: <Moon size={18} />,
     shield: <ShieldCheck size={18} />, hash: <Calculator size={18} />, baby: <Users size={18} />, bookmark: <ScrollText size={18} />,
+    clock: <Clock3 size={18} />,
   };
   return <>{map[name] ?? <Sparkles size={18} />}</>;
 }

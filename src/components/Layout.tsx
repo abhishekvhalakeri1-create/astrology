@@ -4,7 +4,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Baby, Bookmark, CalendarCheck2, ChevronDown, Crown, Heart, Home, IndianRupee, LayoutGrid, Menu, Moon, Phone, ShieldAlert, ShoppingBag, Sparkles, Sun, X } from "lucide-react";
+import { Baby, Bookmark, CalendarCheck2, ChevronDown, Clock3, Crown, Heart, Home, IndianRupee, LayoutGrid, Menu, Moon, Phone, ShieldAlert, ShoppingBag, Sparkles, Sun, X } from "lucide-react";
 import { BRAND } from "../data/catalog";
 import { useApp } from "../store";
 import { CartDrawer, MiniCartNote } from "./Cart";
@@ -26,6 +26,7 @@ export const NAV = [
 export const NAV_MORE = [
   { to: "/doshas", label: "Doshas & Sadhe Satī", icon: ShieldAlert, hint: "cancellations checked, dates given" },
   { to: "/naamkaran", label: "Naamkaran", icon: Baby, hint: "108 syllables × 12 pādas" },
+  { to: "/muhurat", label: "Shubh Muhurat", icon: Clock3, hint: "10 purposes · ranked days & hours" },
   { to: "/pricing", label: "Memberships", icon: Crown, hint: "₹999 – ₹4,999 a year" },
   { to: "/acharya", label: "Book the Acharya", icon: Phone, hint: "call · video · chat" },
   { to: "/saved", label: "My Kundlis", icon: Bookmark, hint: "stored on this device only" },
@@ -146,7 +147,7 @@ export function Header() {
                 </button>
               </div>
               <div className="flex flex-col gap-1">
-                {[...NAV, { to: "/doshas", label: "Doshas & Sade Satī", icon: Sun }, { to: "/naamkaran", label: "Naamkaran", icon: Sparkles }, { to: "/acharya", label: "Our Acharya", icon: Heart }, { to: "/saved", label: "My Kundlis", icon: LayoutGrid }].map((n) => (
+                {[...NAV, { to: "/doshas", label: "Doshas & Sade Satī", icon: Sun }, { to: "/naamkaran", label: "Naamkaran", icon: Sparkles }, { to: "/muhurat", label: "Shubh Muhurat", icon: Clock3 }, { to: "/acharya", label: "Our Acharya", icon: Heart }, { to: "/saved", label: "My Kundlis", icon: LayoutGrid }].map((n) => (
                   <Link key={n.to} to={n.to} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] text-white/75 transition hover:bg-gold-500/10 hover:text-gold-400">
                     <n.icon size={16} className="text-gold-500/70" /> {n.label}
                   </Link>

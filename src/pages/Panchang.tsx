@@ -3,7 +3,7 @@
  * day parts, horā table, and a month calendar whose cells are clickable.
  */
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, CalendarDays, ChevronLeft, ChevronRight, Clock3, Compass, Flame, Moon, Printer, Sun, Sunrise , Timer } from "lucide-react";
+import { AlertTriangle, ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Clock3, Compass, Flame, Moon, Printer, Sun, Sunrise , Timer } from "lucide-react";
 import { panchangaAt, type Panchanga } from "../lib/astro/panchanga";
 import { ghatikasFor } from "../lib/astro/ghatika";
 import { PLACES, searchPlaces, zoneForLon, type Place } from "../data/places";
@@ -12,7 +12,7 @@ import { fmtDate, fmtTime, hash01 } from "../lib/format";
 import { useApp } from "../store";
 import { AddButton } from "../components/Cart";
 import { Button, Card, Container, Divider, Eyebrow, Modal, Pill, Row, Section, SectionHead, Tabs, cx } from "../components/ui";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function PanchangPage() {
   const { activeProfile } = useApp();
@@ -240,6 +240,8 @@ function LimbsCard({ p, tz }: { p: Panchanga; tz: string }) {
 
 /* ───────────────────────── chauḍḍiyā ───────────────────────── */
 
+const isoDay = (d: Date) => new Date(d.getTime() + 12 * 3600000).toISOString().slice(0, 10);
+
 function DayPartsCard({ p, g, tz, placeName }: { p: Panchanga; g: ReturnType<typeof ghatikasFor>; tz: string; placeName: string }) {
   if (!g)
     return (
@@ -289,6 +291,12 @@ function DayPartsCard({ p, g, tz, placeName }: { p: Panchanga; g: ReturnType<typ
             Computed as eighths of daylight for {placeName}: the intervals are 60–110 minutes depending on the season and
             the latitude, never a fixed 90.
           </p>
+          <Link
+            to={`/muhurat?from=${isoDay(new Date(g.sunrise))}&to=${isoDay(new Date(g.sunrise + 45 * 86400000))}`}
+            className="mt-3 flex items-center justify-between rounded-xl border border-gold-500/30 bg-gold-500/[0.06] px-3 py-2 text-[12.5px] font-semibold text-gold-400 transition hover:border-gold-500/60"
+          >
+            find a clean muhūrta from here <ArrowRight size={13} />
+          </Link>
         </Card>
         <Card className="p-5">
           <div className="mb-2.5 text-[12px] font-semibold uppercase tracking-[0.16em] text-jade-400">the window that helps</div>

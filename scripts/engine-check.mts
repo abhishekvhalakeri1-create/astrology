@@ -35,6 +35,7 @@ import { naamkaran } from "../src/lib/astro/naamkaran.ts";
 import { numerologyReading } from "../src/lib/numerology.ts";
 import { horoscopeFor, sadeSati, signAt, upcomingTransits } from "../src/lib/astro/transits.ts";
 import { computeKundli, type BirthInput } from "../src/lib/astro/kundli.ts";
+import { findMuhurat, MUHURAT_PURPOSES, scoreMuhuratDay, pickMuhuratWindow } from "../src/lib/astro/muhurat.ts";
 
 const now0 = Date.parse("2026-11-15T00:00:00Z");
 let fails = 0;
@@ -295,5 +296,50 @@ console.log("\n[7] Whole-pipeline smoke test (kundli → panchang → ghatika �
   check("horoscope: every domain scored 0-100", !!h && h.domains.length >= 5 && h.domains.every((d) => d.score >= 0 && d.score <= 100), h?.domains.map((d) => `${d.key}:${d.score}`).join(" "));
 }
 
+console.log("\n[8] Muhūrta: internal consistency + almanac-crossed invariants");
+{
+  const DELHI = { name: "New Delhi", lat: 28.6139, lon: 77.209, tz: "Asia/Kolkata" };
+  const r = findMuhurat({ purpose: "vivah", fromISO: "2026-11-16", toISO: "2026-12-15", place: DELHI });
+  check("muhūrta: one entry per calendar day in range", r.days.length === 30, `${r.days.length} days`);
+  const isoOk = r.days.every((d, i) => i === 0 || Date.parse(d.iso + "T12:00:00Z") - Date.parse(r.days[i - 1].iso + "T12:00:00Z") === 86400000);
+  check("muhūrta: dates strictly consecutive (no DST or TZ drift)", isoOk, `${r.days[0]?.iso} → ${r.days[r.days.length - 1]?.iso}`);
+  check("muhūrta: every day carries printable reasons", r.days.every((d) => d.reasons.length >= 5 && d.score >= 0 && d.score <= 100), `${r.days[0]?.reasons.length} factors per day`);
+
+  const winOk = r.days.every((d) => {
+    if (!d.window || d.sunrise === null || d.sunset === null) return true;
+    const { start, end } = d.window;
+    if (start < d.sunrise - 1000 || end > d.sunset + 1000) return false;
+    return d.blocked.every((b) => start >= b.end || end <= b.start);
+  });
+  check("muhūrta: chosen window is inside daylight and clear of the three kālas", winOk);
+
+  const abhi = r.days.find((d) => d.window?.tone === "abhijit");
+  check("muhūrta: Abhijit reported when it is clean", !!abhi, abhi ? `${abhi.label} · ${new Date(abhi.window!.start).toISOString().slice(11, 16)}Z` : "no clean Abhijit in range");
+
+  const worst = r.days.reduce((a, b) => (b.score < a.score ? b : a));
+  check("muhūrta: the rejected day is rejected for a printed reason", worst.reasons.some((x) => x.delta <= -12), `${worst.label} ${worst.score} · ${worst.reasons.filter((x) => x.delta < 0).map((x) => `${x.delta} ${x.kind}`).join(", ")}`);
+
+  const vivah = MUHURAT_PURPOSES.find((d) => d.id === "vivah")!;
+  const oracle = panchangaAt(zonedToUtcMs(2026, 11, 15, 12, 0, "Asia/Kolkata"), DELHI, "lahiri");
+  const d15 = pickMuhuratWindow(scoreMuhuratDay(oracle, vivah, oracle.tithi.start), oracle, vivah);
+  check("muhūrta: reads the same almanac the Panchang page prints", oracle.tithi.value.number === 6 && oracle.paksha === "Shukla" && oracle.nakshatra.value.name === "Uttara Ashadha", `${oracle.tithi.value.name} · ${oracle.nakshatra.value.name} · yoga ${oracle.yoga.value.name} · ${oracle.karana.value.name}`);
+  check("muhūrta: Uttara Ashadha counted excellent for marriage", d15.reasons.some((x) => x.kind === "nakshatra" && x.delta === 14), `score ${d15.score} · ${d15.klass}`);
+
+  const pitra = findMuhurat({ purpose: "pitra", fromISO: "2026-11-24", toISO: "2026-12-10", place: DELHI });
+  check("muhūrta: pitṛ karma prefers the dark fortnight", pitra.best?.tithi.paksha === "Krishna", `${pitra.best?.label} · tithi ${pitra.best?.tithi.number} ${pitra.best?.tithi.paksha} · ${pitra.best?.score}`);
+  const amav = pitra.days.find((d) => d.tithi.number === 15 && d.tithi.paksha === "Krishna");
+  const avg = Math.round(pitra.days.reduce((a, b) => a + b.score, 0) / pitra.days.length);
+  check("muhūrta: Amāvāsyā outscores the fortnight average", !!amav && amav.score >= avg, `${amav?.label ?? "-"} ${amav?.score ?? "-"} vs mean ${avg}`);
+
+  const allOk = MUHURAT_PURPOSES.every((d) => {
+    const x = findMuhurat({ purpose: d.id, fromISO: "2026-12-01", toISO: "2026-12-31", place: DELHI, limit: 31 });
+    return x.ranked.length === 31 && x.days.every((y) => !!y.nakshatra.name && !!y.tithi.name && y.reasons.length > 4);
+  });
+  check("muhūrta: all purposes compute a full month", allOk, `${MUHURAT_PURPOSES.length} purposes`);
+
+  const car = findMuhurat({ purpose: "car", fromISO: "2026-11-16", toISO: "2026-12-15", place: DELHI });
+  const profile = (x: typeof car) => x.days.map((d) => d.score).join(",");
+  check("muhūrta: purposes genuinely score differently", profile(car) !== profile(r), `marriage top ${r.best?.label} ${r.best?.score} · vehicle top ${car.best?.label} ${car.best?.score}`);
+}
 console.log(`\n${fails === 0 ? "✅ all engine checks passed" : "❌ engine checks failed"} — ${passes} pass / ${fails} fail\n`);
 process.exit(fails === 0 ? 0 : 1);

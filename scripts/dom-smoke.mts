@@ -68,7 +68,9 @@ const routes: [string, RegExp][] = [
   ["#/services", /price on it/i],
   ["#/pricing", /Prices,/i],
   ["#/acharya", /Acharya|Krishna/i],
+  ["#/muhurat", /see why it won/i],
   ["#/saved", /My Kundlis/i],
+  ["#/services#gems", /price on it/i],
 ];
 const headingText = () => [...window.document.querySelectorAll("h1")].map((e) => e.textContent ?? "").join(" / ").replace(/\s+/g, " ");
 const text = () => (window.document.body.textContent ?? "").replace(/\s+/g, " ").trim();
@@ -98,6 +100,35 @@ for (const [r, marker] of routes) {
     const h1 = window.document.querySelector("h1")?.textContent?.replace(/\s+/g, " ") ?? "(no h1)";
     console.log(`        hash=${window.location.hash} · h1="${headingText().slice(0, 90)}"`);
   }
+}
+
+// interaction: deep link must preselect the purpose and the range
+{
+  window.location.hash = "#/muhurat?purpose=car&from=2026-12-01&to=2026-12-20";
+  window.dispatchEvent(new window.Event("hashchange"));
+  const ok = await waitFor(() => /20 days scanned/i.test(text()) && /vehicle purchase/i.test(text()));
+  console.log(`  ${ok ? "PASS" : "FAIL"}  muhūrta deep link preselects purpose=car and a 20-day range`);
+}
+
+// interaction: muhūrta — switching purpose must re-rank the days
+{
+  window.location.hash = "#/muhurat";
+  window.dispatchEvent(new window.Event("hashchange"));
+  await waitFor(() => /Pick the day/i.test(text()));
+  const before = errors.length;
+  const firstCard = () => window.document.querySelector("[data-muhurat-top]")?.textContent ?? "";
+  const topBefore = firstCard();
+  const btn = [...window.document.querySelectorAll("button")].find((b) => /Griha/.test(b.textContent ?? ""));
+  if (btn) {
+    btn.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+    await tick(500);
+    const after = firstCard();
+    console.log(`  ${topBefore && after && topBefore !== after ? "PASS" : "WARN"}  muhūrta: purpose switch re-ranks the list`);
+    if (topBefore && after && topBefore === after) console.log("        (same top day for both purposes — allowed but worth a look)");
+  } else {
+    console.log("  FAIL  muhūrta: purpose buttons not found");
+  }
+  if (errors.length !== before) console.log(`  note: ${errors.length - before} console error(s) while switching muhūrta purpose`);
 }
 
 // interaction: add a service to the cart and open checkout

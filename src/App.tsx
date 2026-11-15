@@ -20,6 +20,7 @@ const ServicesPage = lazy(() => import("./pages/Services").then((m) => ({ defaul
 const PricingPage = lazy(() => import("./pages/Pricing").then((m) => ({ default: m.PricingPage })));
 const AcharyaPage = lazy(() => import("./pages/Acharya").then((m) => ({ default: m.AcharyaPage })));
 const SavedPage = lazy(() => import("./pages/Saved").then((m) => ({ default: m.SavedPage })));
+const MuhuratPage = lazy(() => import("./pages/Muhurat").then((m) => ({ default: m.MuhuratPage })));
 
 /** shown while a route chunk is fetching — a turning mandala, not a spinner */
 function RouteFallback() {
@@ -59,11 +60,13 @@ function ScrollManager() {
       const id = decodeURIComponent(hash.replace("#", ""));
       const el = document.getElementById(id);
       if (el) {
-        window.requestAnimationFrame(() => el.scrollIntoView({ behavior: "smooth", block: "start" }));
+        // jsdom and a few older webviews lack scrollIntoView — never let a
+        // scroll helper break a page render
+        window.requestAnimationFrame(() => el.scrollIntoView?.({ behavior: "smooth", block: "start" }));
         return;
       }
     }
-    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    window.scrollTo?.({ top: 0, behavior: "instant" as ScrollBehavior });
   }, [pathname, hash]);
   return null;
 }
@@ -131,6 +134,9 @@ export default function App() {
                 <Route path="/acharya" element={<AcharyaPage />} />
                 <Route path="/saved" element={<SavedPage />} />
                 <Route path="/remedies" element={<Navigate to="/services" replace />} />
+                <Route path="/rashifal" element={<Navigate to="/horoscope" replace />} />
+                <Route path="/muhurat" element={<MuhuratPage />} />
+                <Route path="/shubh-muhurat" element={<Navigate to="/muhurat" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

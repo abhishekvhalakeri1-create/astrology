@@ -71,8 +71,8 @@ export function ServicesPage() {
                 Everything we sell, <span className="text-gradient-gold">with the price on it</span>
               </h1>
               <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-white/60">
-                From {inr(cheapest)} upward, GST included, no call-me-first quotes and no "starts at" asterisks. The eight
-                calculation tools are free and stay free — you are paying for a typeset report, a priest's time, a certified
+                From {inr(cheapest)} upward, GST included, no call-me-first quotes and no "starts at" asterisks. The{" "}
+                {FREE_TOOLS.length} calculation tools are free and stay free — you are paying for a typeset report, a priest's time, a certified
                 stone, or an Acharya's judgement.
               </p>
             </div>
@@ -306,7 +306,7 @@ export function ServicesPage() {
                 <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-jade-400">
                   <Sparkles size={13} /> free forever
                 </div>
-                <h3 className="mt-2 font-display text-[1.5rem] text-white sm:text-[1.9rem]">These eight cost nothing, always</h3>
+                <h3 className="mt-2 font-display text-[1.5rem] text-white sm:text-[1.9rem]">These {FREE_TOOLS.length} cost nothing, always</h3>
                 <p className="mt-1.5 max-w-2xl text-[13.5px] leading-relaxed text-white/55">
                   If you only ever use these, that is a complete experience — the paid items exist for people who want the PDF,
                   the priest or the human.

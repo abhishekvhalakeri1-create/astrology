@@ -72,10 +72,11 @@ export const FREE_TOOLS: { id: string; title: string; desc: string; to: string; 
   { id: "kundli", title: "Janma Kundli", desc: "Rāsi + Navāṁsa charts, 9 graha positions, daśā timeline, yogas & doshas. Print to PDF.", to: "/kundli", icon: "compass" },
   { id: "milan", title: "Kundli Milan", desc: "Ashtakoot 36-point match with Gaṇa, Nāḍī and Bhakūt working shown, plus Maṅgālīka cross-check.", to: "/milan", icon: "heart" },
   { id: "panchang", title: "Daily Panchang", desc: "Tithi, nakṣatra, yoga, karaṇa, vāra with exact start/end times for your city, Rāhu Kāla & horā.", to: "/panchang", icon: "sun" },
-  { id: "rashifal", title: "Rāshifal", desc: "Monthly & yearly horoscope scored from live Jupiter/Saturn transits — not recycled text.", to: "/rashifal", icon: "moon" },
+  { id: "rashifal", title: "Rāshifal", desc: "Monthly & yearly horoscope scored from live Jupiter/Saturn transits — not recycled text.", to: "/horoscope", icon: "moon" },
   { id: "dosha", title: "Sade Satī · Kāla Sarpa · Kuja", desc: "Exact entry & exit dates of Saturn over your Moon, dosha cancellations and the remedy that fits.", to: "/doshas", icon: "shield" },
   { id: "numerology", title: "Numerology", desc: "Mulank, Bhāgyaṅk, Chaldean name number, personal year, lucky dates, name-correction candidates.", to: "/numerology", icon: "hash" },
   { id: "naamkaran", title: "Naamkaran", desc: "Baby names from the janma nakṣatra pāda syllables, with Gāṇa, Yoni and Nāḍī notes.", to: "/naamkaran", icon: "baby" },
+  { id: "muhurat", title: "Shubh Muhurat", desc: "Ranked dates and exact hours for 10 activities — tithi, nakṣatra, yoga, karaṇa and the three kālas, with every ± shown.", to: "/muhurat", icon: "clock" },
   { id: "saved", title: "My Kundlis", desc: "Save any number of charts on this device and reopen them in a second. Nothing leaves your browser.", to: "/saved", icon: "bookmark" },
 ];
 
