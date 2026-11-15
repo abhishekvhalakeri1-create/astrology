@@ -40,8 +40,20 @@ npm run lint
 `npm run build` writes the complete website into the `out` folder. Putting the site online means
 putting that folder on a web host.
 
-**Netlify, Cloudflare Pages, Vercel and similar.** Connect the repository and set the build command to
-`npm run build` and the publish directory to `out`.
+**Netlify.** The repository carries a `netlify.toml`, so Netlify needs no settings typed in.
+
+1. Sign in at [app.netlify.com](https://app.netlify.com) with your GitHub account.
+2. Choose **Add new project → Import an existing project → GitHub** and allow Netlify to see this repository.
+3. Pick the repository and the branch to publish (normally `main`), leave the build settings as Netlify
+   shows them, and deploy.
+
+Netlify gives the site an address ending in `netlify.app` and publishes again on every push to that
+branch. A domain of your own is added under Domain management → Production domains. The sitemap and
+the link-preview picture use the site's address without any setting; after renaming the site or adding
+a domain, run one more deploy (Deploys → Trigger deploy) so they follow.
+
+**Cloudflare Pages and similar hosts.** Connect the repository and set the build command to
+`npm run build` and the output directory to `out`.
 
 **Any other web host.** Run `npm run build` on your computer and upload everything inside `out`.
 
@@ -153,6 +165,7 @@ lib/site.ts          contact details, services and fees
 lib/content.ts       journal notes and reviews
 public/              pictures, copied into the site as they are
 scripts/serve.mjs    the small local server behind `npm start`
+netlify.toml         how Netlify builds and serves the site
 scripts/verify-astro.ts and scripts/fixtures/   the calculation checks
 ```
 
